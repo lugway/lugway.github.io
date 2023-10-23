@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서명하기</title>
+    <style>
+        canvas {
+            border: 1px solid #000000;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+</head>
+<body>
+    <h1>서명하세요</h1>
+    <canvas id="signatureCanvas" width="575" height="845"></canvas><br>
+    <button id="saveButton">저장</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var canvas = document.getElementById("signatureCanvas");
+            var ctx = canvas.getContext("2d");
+            var drawing = false;
+
+            var pdf = new jsPDF("p", "mm", "a4");
+
+            var image = new Image();
+            image.crossOrigin = 'Anonymous'; // crossOrigin 옵션 추가
+            image.src = '1.png';
+            image.onload = function() {
+                ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+            };
+
+            canvas.addEventListener("mousedown", function (e) {
+                drawing = true;
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = "#000000";
+                ctx.beginPath();
+                ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+            });
+
+            canvas.addEventListener("mousemove", function (e) {
+                if (drawing) {
+                    ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+                    ctx.stroke();
+                }
+            });
+
+            canvas.addEventListener("mouseup", function (e) {
+                drawing = false;
+            });
+
+            document.getElementById("saveButton").addEventListener("click", function() {
+                var dataURL = canvas.toDataURL(); 
+
+                pdf.addImage(dataURL, 'JPEG', 10, 10, 555, 825); 
+                pdf.addPage(); 
+                pdf.addImage(image, 'PNG', 10, 10, 555, 825); 
+                pdf.save('signed.pdf'); 
+            });
+        });
+    </script>
+</body>
+</html>
