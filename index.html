@@ -54,7 +54,7 @@
                 var dataURL = canvas.toDataURL('image/jpeg', 1.0); //이미지 형식 지정
 
                 //pdf.addImage(dataURL, 'JPEG', 0, 0, 575 * 0.2645, 845 * 0.2645); 
-				pdf.addImage(dataURL, 'JPEG', 0, 0, 793, 1123); 
+				pdf.addImage(dataURL, 'JPEG', 0, 0, 793 * 0.2645, 1123 * 0.2645); 
                 //pdf.addPage(); 
                 //pdf.addImage(image, 'PNG', 0, 0, 575, 845); 
                 pdf.save('signed.pdf'); 
